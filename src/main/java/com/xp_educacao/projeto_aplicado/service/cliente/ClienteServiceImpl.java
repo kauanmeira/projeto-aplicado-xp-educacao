@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Service
@@ -31,7 +32,7 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Cliente buscarPorId(Long id) {
         return clienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+                .orElseThrow(() -> new XpException(HttpStatus.BAD_REQUEST, "Cliente não encontrado: " + id));
     }
 
     @Override
@@ -52,13 +53,20 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public boolean excluir(Long id) {
-        try {
-            clienteRepository.deleteById(id);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public Cliente buscarPorEmail(String email) {
+        return clienteRepository.findByEmail(email);
+    }
+
+    @Override
+    public Cliente buscarPorDocumento(String documento) {
+        return clienteRepository.findByDocumento(documento.trim().replaceAll("\\D", ""));
+    }
+
+    @Override
+    public void excluir(Long id) {
+        if (isNull(this.buscarPorId(id)))
+            throw new XpException(HttpStatus.BAD_REQUEST, "Cliente não encontrado para o id: " + id);
+        clienteRepository.deleteById(id);
     }
 
     @Override

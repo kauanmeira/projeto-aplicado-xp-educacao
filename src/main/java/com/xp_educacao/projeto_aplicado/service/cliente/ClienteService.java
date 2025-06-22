@@ -16,7 +16,11 @@ public interface ClienteService {
 
     Cliente atualizar(Cliente cliente);
 
-    boolean excluir(Long id);
+    void excluir(Long id);
 
     Long buscarTotalDeRegistros();
+
+    Cliente buscarPorDocumento(String documento);
+
+    Cliente buscarPorEmail(String email);
 }

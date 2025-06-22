@@ -44,6 +44,11 @@ public class ClienteController {
         return clienteComponent.listarTodos();
     }
 
+    @DeleteMapping("/{id}")
+    public void excluir(@PathVariable Long id) {
+        clienteComponent.excluir(id);
+    }
+
     @GetMapping("/quantidade")
     public Long buscarQuantidadeClientes(){
         return clienteComponent.buscarQuantidadeClientes();
